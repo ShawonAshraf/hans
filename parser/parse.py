@@ -11,13 +11,26 @@ def parse(file_name):
     # all characters
     characters = set()
 
+    # replace the errenous keys with values in the characters set
+    errors = {
+        "HANS                                 *": "HANS",
+        "ARGYLE'S VOICE": "ARGYLE",
+        "WOMAN (HOLLY)": "HOLLY",
+        "MCCLANE'S VOICE": "MCCLANE",
+        "MAN #1 (THEO)": "THEO",
+        "SALESMAN'S VOICE": "SALESMAN"
+    }
+
     with open(file_name, "r") as f:
         data = json.load(f)
         scripts = data["movie_script"]
 
         for script in scripts:
             if script["type"] == "speech":
-                characters.add(script["character"])
+                character = script["character"]
+                if character in errors.keys():
+                    character = errors[character]
+                characters.add(character)
 
     print(characters)
 
